@@ -87,6 +87,16 @@ class Item
     }
 
     /**
+     * @param $promotion_id
+     */
+    public function promotion_id($promotion_id)
+    {
+        $node = new Node('promotion_id');
+        $promotion_id = $this->safeCharEncodeText($promotion_id);
+        $this->nodes['promotion_id'] = $node->value($promotion_id)->_namespace($this->namespace)->addCdata();
+    }
+
+    /**
      * @param $title
      */
     public function title($title)
@@ -291,6 +301,16 @@ class Item
             $this->nodes['shipping'] = array();
         }
         $this->nodes['shipping'][] = $node->value($value)->_namespace($this->namespace);
+    }
+
+    /**
+     * @param $shipping_label
+     */
+    public function shipping_label($shipping_label)
+    {
+        $node = new Node('shipping_label');
+        $shipping_label = $this->safeCharEncodeText($shipping_label);
+        $this->nodes['shipping_label'] = $node->value($shipping_label)->_namespace($this->namespace)->addCdata();
     }
 
     /**
