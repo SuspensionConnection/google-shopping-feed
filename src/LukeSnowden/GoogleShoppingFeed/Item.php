@@ -14,6 +14,8 @@ class Item
     const OUTOFSTOCK      = 'out of stock';
 
     const PREORDER        = 'preorder';
+    
+    const BACKORDER       = 'backorder';
 
     const BRANDNEW        = 'new';
 
@@ -117,6 +119,15 @@ class Item
     }
 
     /**
+     * @param $link
+     */
+    public function ads_redirect($link)
+    {
+        $node = new Node('ads_redirect');
+        $this->nodes['ads_redirect'] = $node->value($link)->_namespace($this->namespace)->addCdata();
+    }
+
+    /**
      * @param $price
      */
     public function price($price)
@@ -143,14 +154,28 @@ class Item
     }
 
     /**
-     * @param $description
+     * @param $salePriceEffectiveDate
      */
-    public function description($description)
+    public function sale_price_effective_date($salePriceEffectiveDate)
     {
+        $node = new Node('sale_price_effective_date');
+        $this->nodes['sale_price_effective_date'] = $node->value( $salePriceEffectiveDate )->_namespace($this->namespace);
+    }
+
+    /**
+     * @param $description
+     * @param string $encoding
+     */
+    public function description($description, string $encoding = '')
+    {
+        if (empty($encoding)) {
+            $encoding = mb_internal_encoding();
+        }
+
         $description = preg_replace( "#<iframe[^>]+>[^<]?</iframe>#is", '', $description );
         $node = new Node('description');
         $description = $this->safeCharEncodeText($description);
-        $this->nodes['description'] = $node->value(substr($description, 0, 5000))->_namespace($this->namespace)->addCdata();
+        $this->nodes['description'] = $node->value(mb_substr($description, 0, 5000, $encoding))->_namespace($this->namespace)->addCdata();
     }
 
     /**
@@ -278,8 +303,17 @@ class Item
      */
     public function unitPricingMeasure($unitPricingMeasure)
     {
-        $node = new Node('unit_​pricing_​measure');
-        $this->nodes['unit_​pricing_​measure'] = $node->value($unitPricingMeasure)->_namespace($this->namespace);
+        $node = new Node('unit_pricing_measure');
+        $this->nodes['unit_pricing_measure'] = $node->value($unitPricingMeasure)->_namespace($this->namespace);
+    }
+
+    /**
+     * @param $unitPricingBaseMeasure
+     */
+    public function unitPricingBaseMeasure($unitPricingBaseMeasure)
+    {
+        $node = new Node('unit_pricing_base_measure');
+        $this->nodes['unit_pricing_base_measure'] = $node->value($unitPricingBaseMeasure)->_namespace($this->namespace);
     }
 
     /**
